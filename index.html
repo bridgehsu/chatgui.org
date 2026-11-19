@@ -13,6 +13,23 @@
         document.documentElement.classList.toggle("dark", dark);
         document.documentElement.dataset.theme = dark ? "dark" : "light";
       } catch (e) {}
+      // Recover path after GitHub Pages 404.html redirect (?/about → /about)
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(
+            null,
+            "",
+            l.pathname.slice(0, -1) + decoded + l.hash,
+          );
+        }
+      })(window.location);
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
