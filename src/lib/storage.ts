@@ -7,6 +7,11 @@ import type {
   Settings,
 } from "../types";
 import { detectBrowserAI } from "./browserAI";
+import {
+  activateModelEntry,
+  loadActiveModelId,
+  loadModelEntries,
+} from "./modelsStore";
 
 export const SETTINGS_KEY = "chatgui.settings.v1";
 export const CHATS_KEY = "chatgui.chats.v1";
@@ -76,17 +81,35 @@ export function hasSavedSettings() {
 
 /** 首次访问：浏览器本地可用则优先，否则本机 Ollama */
 export async function resolveInitialSettings(): Promise<Settings> {
-  if (hasSavedSettings()) return loadSettings();
+  const entries = loadModelEntries();
+
+  if (hasSavedSettings()) {
+    const settings = loadSettings();
+    const activeId = loadActiveModelId(entries);
+    const active = entries.find((e) => e.id === activeId);
+    if (active) {
+      activateModelEntry(active);
+      return loadSettings();
+    }
+    return settings;
+  }
 
   const { status } = await detectBrowserAI();
   if (status === "readily") {
-    const next: Settings = {
-      ...defaultSettings,
-      engine: "browser",
-      model: "Gemini Nano",
-    };
-    saveSettings(next);
-    return next;
+    const chrome = entries.find((e) => e.engine === "browser") || entries[0];
+    if (chrome) {
+      activateModelEntry(chrome);
+      return loadSettings();
+    }
+  }
+
+  const ollama =
+    entries.find((e) => e.id === "ollama") ||
+    entries.find((e) => e.engine === "local") ||
+    entries[0];
+  if (ollama) {
+    activateModelEntry(ollama);
+    return loadSettings();
   }
 
   const next = { ...defaultSettings, engine: "local" as const };

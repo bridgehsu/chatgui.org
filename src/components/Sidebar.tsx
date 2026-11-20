@@ -27,7 +27,31 @@ export function Sidebar({
   const { t } = useI18n();
 
   return (
-    <aside className={`sidebar${open ? " open" : ""}`} aria-label="sidebar">
+    <aside
+      className={`history-drawer${open ? " open" : ""}`}
+      aria-label={t("history")}
+      aria-hidden={!open}
+      inert={!open ? true : undefined}
+    >
+      <div className="history-drawer-head">
+        <strong>{t("history")}</strong>
+        <button
+          type="button"
+          className="icon-btn history-close"
+          aria-label={t("close")}
+          onClick={onClose}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+
       <div className="sidebar-actions">
         <button type="button" className="btn btn-new" onClick={onNewChat}>
           + {t("newChat")}
@@ -79,7 +103,7 @@ export function Sidebar({
           <span>{status.text}</span>
         </div>
         <button type="button" className="ghost-btn" onClick={onOpenSettings}>
-          {t("settings")}
+          {t("navModels")}
         </button>
       </div>
     </aside>

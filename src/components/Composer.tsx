@@ -1,16 +1,33 @@
 import { useEffect, useRef } from "react";
 import { useI18n } from "../lib/i18n";
+import type { ModelEntry } from "../types";
+import { ModelPicker } from "./ModelPicker";
 
 type Props = {
   value: string;
   busy: boolean;
   hint: string;
+  modelEntries: ModelEntry[];
+  activeModelId: string | null;
   onChange: (value: string) => void;
   onSubmit: () => void;
   onStop: () => void;
+  onSelectModel: (entry: ModelEntry) => void;
+  onOpenSettings: () => void;
 };
 
-export function Composer({ value, busy, hint, onChange, onSubmit, onStop }: Props) {
+export function Composer({
+  value,
+  busy,
+  hint,
+  modelEntries,
+  activeModelId,
+  onChange,
+  onSubmit,
+  onStop,
+  onSelectModel,
+  onOpenSettings,
+}: Props) {
   const { t } = useI18n();
   const ref = useRef<HTMLTextAreaElement>(null);
 
@@ -32,43 +49,54 @@ export function Composer({ value, busy, hint, onChange, onSubmit, onStop }: Prop
             else onSubmit();
           }}
         >
-          <textarea
-            id="input"
-            ref={ref}
-            rows={1}
-            value={value}
-            placeholder={t("askPlaceholder")}
-            onChange={(e) => onChange(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                if (busy) onStop();
-                else onSubmit();
-              }
-            }}
-          />
-          <button
-            className={`primary-btn${busy ? " stop" : ""}`}
-            type="submit"
-            aria-label={busy ? t("stop") : t("send")}
-            title={busy ? t("stop") : t("send")}
-          >
-            {busy ? (
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden>
-                <rect x="3" y="3" width="8" height="8" rx="1.5" />
-              </svg>
-            ) : (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path
-                  d="M5 12h12M13 6l6 6-6 6"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </button>
+          <div className="composer-row">
+            <textarea
+              id="input"
+              ref={ref}
+              rows={1}
+              value={value}
+              placeholder={t("askPlaceholder")}
+              onChange={(e) => onChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  if (busy) onStop();
+                  else onSubmit();
+                }
+              }}
+            />
+            <button
+              className={`primary-btn${busy ? " stop" : ""}`}
+              type="submit"
+              aria-label={busy ? t("stop") : t("send")}
+              title={busy ? t("stop") : t("send")}
+            >
+              {busy ? (
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden>
+                  <rect x="3" y="3" width="8" height="8" rx="1.5" />
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M5 12h12M13 6l6 6-6 6"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
+          <div className="composer-toolbar">
+            <ModelPicker
+              entries={modelEntries}
+              activeId={activeModelId}
+              disabled={busy}
+              onSelect={onSelectModel}
+              onOpenSettings={onOpenSettings}
+            />
+          </div>
         </form>
         <p className="hint">{hint}</p>
       </div>

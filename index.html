@@ -4,8 +4,38 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="description" content="ChatGUI — a minimal chat shell for on-device browser AI, local models (Ollama), and OpenAI-compatible APIs." />
-    <title>ChatGUI</title>
+    <title>ChatGUI — 浏览器 / 本地 / API 极简聊天壳</title>
+    <meta
+      name="description"
+      content="免安装打开即用。支持 Chrome 内置模型、Ollama / LM Studio 本机模型，以及 OpenRouter 等 OpenAI 兼容接口。对话保存在浏览器本地。"
+    />
+    <meta
+      name="keywords"
+      content="ChatGUI,本地大模型,Ollama,LM Studio,浏览器AI,OpenRouter,OpenAI兼容"
+    />
+    <meta name="application-name" content="ChatGUI" />
+    <meta name="theme-color" content="#0e1015" />
+    <link rel="canonical" href="https://chatgui.org/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ChatGUI" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:url" content="https://chatgui.org/" />
+    <meta property="og:title" content="ChatGUI — 浏览器 / 本地 / API 极简聊天壳" />
+    <meta
+      property="og:description"
+      content="免安装打开即用。支持 Chrome 内置模型、Ollama / LM Studio 本机模型，以及 OpenRouter 等 OpenAI 兼容接口。"
+    />
+    <meta property="og:image" content="https://chatgui.org/favicon.svg" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="ChatGUI — 浏览器 / 本地 / API 极简聊天壳" />
+    <meta
+      name="twitter:description"
+      content="免安装打开即用。支持浏览器内置 AI、本机模型与 OpenAI 兼容 API。"
+    />
+    <meta name="twitter:image" content="https://chatgui.org/favicon.svg" />
+
     <script>
       try {
         var t = localStorage.getItem("chatgui_theme") || "dark";
@@ -31,9 +61,6 @@
         }
       })(window.location);
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

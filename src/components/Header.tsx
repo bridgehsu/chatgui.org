@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useI18n } from "../lib/i18n";
 import { LocaleSwitch } from "./LocaleSwitch";
 import { ThemeToggle } from "./ThemeToggle";
@@ -8,7 +8,7 @@ export function Header() {
 
   return (
     <header className="site-header">
-      <div className="site-header-left">
+      <div className="site-header-inner">
         <Link className="site-logo" to="/" aria-label={`${t("brand")} home`}>
           <img
             className="site-logo-img"
@@ -17,19 +17,11 @@ export function Header() {
           />
           <strong>{t("brand")}</strong>
         </Link>
-        <nav className="site-nav" aria-label="Primary">
-          <NavLink to="/about" className={({ isActive }) => (isActive ? "active" : undefined)}>
-            {t("about")}
-          </NavLink>
-          <NavLink to="/docs" className={({ isActive }) => (isActive ? "active" : undefined)}>
-            {t("docs")}
-          </NavLink>
-        </nav>
-      </div>
 
-      <div className="site-header-actions">
-        <LocaleSwitch />
-        <ThemeToggle />
+        <div className="site-header-actions">
+          <LocaleSwitch />
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

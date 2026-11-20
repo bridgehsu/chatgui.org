@@ -30,6 +30,17 @@ export type Settings = {
   model: string;
 };
 
+/** Saved model / provider row on the Models page */
+export type ModelEntry = {
+  id: string;
+  name: string;
+  engine: EngineMode;
+  preset: PresetKey;
+  baseUrl: string;
+  apiKey: string;
+  model: string;
+};
+
 export type ConnectionStatus = {
   kind: "" | "ok" | "bad" | "busy";
   text: string;

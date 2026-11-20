@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Composer } from "../components/Composer";
-import { EngineSwitch } from "../components/EngineSwitch";
 import { MessageList } from "../components/MessageList";
-import { SettingsModal } from "../components/SettingsModal";
 import { Sidebar } from "../components/Sidebar";
 import { trackEvent } from "../lib/analytics";
 import { useI18n } from "../lib/i18n";
@@ -14,11 +13,16 @@ import {
   streamWithProvider,
 } from "../lib/provider";
 import {
+  activateModelEntry,
+  entryToSettings,
+  loadActiveModelId,
+  loadModelEntries,
+} from "../lib/modelsStore";
+import {
   loadConversations,
   resolveInitialSettings,
   saveConversations,
   saveSettings,
-  settingsForEngine,
   titleFromMessages,
   uid,
 } from "../lib/storage";
@@ -27,7 +31,7 @@ import type {
   ChatMessage,
   ConnectionStatus,
   Conversation,
-  EngineMode,
+  ModelEntry,
   Settings,
 } from "../types";
 
@@ -64,6 +68,8 @@ function persistConversation(
 
 export function ChatPage() {
   const { t } = useI18n();
+  const navigate = useNavigate();
+  const goSettings = useCallback(() => navigate("/models"), [navigate]);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>(() =>
     loadConversations(),
@@ -72,10 +78,15 @@ export function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const [browserStatus, setBrowserStatus] =
     useState<BrowserAIStatus>("unsupported");
+  const [modelEntries, setModelEntries] = useState<ModelEntry[]>(() =>
+    loadModelEntries(),
+  );
+  const [activeModelId, setActiveModelId] = useState<string | null>(() =>
+    loadActiveModelId(loadModelEntries()),
+  );
   const [status, setStatus] = useState<ConnectionStatus>({
     kind: "busy",
     text: t("statusDetecting"),
@@ -118,7 +129,7 @@ export function ChatPage() {
     setActiveId(null);
     setMessages([]);
     setInput("");
-    setSidebarOpen(false);
+    setHistoryOpen(false);
   }, [busy]);
 
   const selectChat = useCallback(
@@ -195,23 +206,29 @@ export function ChatPage() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSettingsOpen(false);
-        setSidebarOpen(false);
-      }
+      if (e.key === "Escape") setHistoryOpen(false);
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
-  async function changeEngine(engine: EngineMode) {
-    if (!settings || settings.engine === engine) return;
-    const next = settingsForEngine(engine, settings);
-    applySettings(next);
-    const result = await probeConnection(next);
-    if (engine === "browser" && !result.ok) {
-      setSettingsOpen(true);
-    }
+  useEffect(() => {
+    const refresh = () => {
+      const next = loadModelEntries();
+      setModelEntries(next);
+      setActiveModelId(loadActiveModelId(next));
+    };
+    refresh();
+    window.addEventListener("focus", refresh);
+    return () => window.removeEventListener("focus", refresh);
+  }, []);
+
+  function selectModelEntry(entry: ModelEntry) {
+    activateModelEntry(entry);
+    setActiveModelId(entry.id);
+    const next = entryToSettings(entry);
+    setSettings(next);
+    void probeConnection(next);
   }
 
   async function sendMessage(text: string) {
@@ -219,7 +236,7 @@ export function ChatPage() {
     if (!content || busy || !settings) return;
 
     if (!canSend(settings, browserStatus)) {
-      setSettingsOpen(true);
+      goSettings();
       return;
     }
 
@@ -318,65 +335,62 @@ export function ChatPage() {
     );
   }
 
-  const modelLabel =
-    settings.engine === "browser"
-      ? "Gemini Nano"
-      : settings.model || t("selectModel");
-
   return (
     <div className="app-shell">
-      <div
-        className={`sidebar-backdrop${sidebarOpen ? " show" : ""}`}
-        onClick={() => setSidebarOpen(false)}
-      />
+      {historyOpen ? (
+        <button
+          type="button"
+          className="history-backdrop show"
+          aria-label={t("close")}
+          onClick={() => setHistoryOpen(false)}
+        />
+      ) : null}
       <Sidebar
-        open={sidebarOpen}
+        open={historyOpen}
         conversations={conversations}
         activeId={activeId}
         status={status}
         onNewChat={startNewChat}
         onSelect={selectChat}
         onDelete={deleteChat}
-        onOpenSettings={() => setSettingsOpen(true)}
-        onClose={() => setSidebarOpen(false)}
+        onOpenSettings={goSettings}
+        onClose={() => setHistoryOpen(false)}
       />
 
       <main className="main">
-        <div className="topbar">
-          <div className="topbar-left">
-            <button
-              type="button"
-              className="icon-btn menu-btn"
-              aria-label={t("openMenu")}
-              onClick={() => setSidebarOpen(true)}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path
-                  d="M4 7h16M4 12h16M4 17h16"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-            <EngineSwitch
-              value={settings.engine}
-              disabled={busy}
-              onChange={(engine) => {
-                void changeEngine(engine);
-              }}
-            />
-            <button
-              type="button"
-              className="model-pill"
-              onClick={() => setSettingsOpen(true)}
-              title={t("settings")}
-            >
-              {modelLabel}
-            </button>
-          </div>
-          <button type="button" className="ghost-btn" onClick={startNewChat}>
-            {t("newChat")}
+        <div className="chat-tools">
+          <button
+            type="button"
+            className="icon-btn"
+            aria-label={t("openHistory")}
+            aria-expanded={historyOpen}
+            title={t("openHistory")}
+            onClick={() => setHistoryOpen(true)}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path
+                d="M4 5.5h16A1.5 1.5 0 0 1 21.5 7v10a1.5 1.5 0 0 1-1.5 1.5H4A1.5 1.5 0 0 1 2.5 17V7A1.5 1.5 0 0 1 4 5.5z"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+              <path d="M9 5.5v13" stroke="currentColor" strokeWidth="1.7" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="icon-btn"
+            aria-label={t("newChat")}
+            title={t("newChat")}
+            onClick={startNewChat}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path
+                d="M12 5v14M5 12h14"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
           </button>
         </div>
 
@@ -385,29 +399,22 @@ export function ChatPage() {
           onSuggest={(text) => {
             void sendMessage(text);
           }}
-          onOpenSettings={() => setSettingsOpen(true)}
+          onOpenSettings={goSettings}
         />
 
         <Composer
           value={input}
           busy={busy}
           hint={hint}
+          modelEntries={modelEntries}
+          activeModelId={activeModelId}
           onChange={setInput}
           onSubmit={() => void sendMessage(input)}
           onStop={() => abortRef.current?.abort()}
+          onSelectModel={selectModelEntry}
+          onOpenSettings={goSettings}
         />
       </main>
-
-      <SettingsModal
-        open={settingsOpen}
-        settings={settings}
-        browserStatus={browserStatus}
-        onClose={() => setSettingsOpen(false)}
-        onSave={async (next) => {
-          applySettings(next);
-          await probeConnection(next);
-        }}
-      />
     </div>
   );
 }
