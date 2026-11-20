@@ -1,101 +1,155 @@
+export type AboutCard = {
+  title: string;
+  body: string;
+};
+
+export type AboutContent = {
+  title: string;
+  lead: string;
+  vision: {
+    heading: string;
+    paragraphs: string[];
+  };
+  whatWeDo: {
+    heading: string;
+    items: AboutCard[];
+  };
+  values: {
+    heading: string;
+    items: AboutCard[];
+  };
+  closing: {
+    heading: string;
+    paragraphs: string[];
+  };
+};
+
+export const aboutZh: AboutContent = {
+  title: "关于 ChatGUI",
+  lead:
+    "我们想做最薄的一层聊天壳：连接浏览器内置模型、本机本地大模型，以及你自行配置的 OpenAI 兼容接口。",
+  vision: {
+    heading: "我们的愿景",
+    paragraphs: [
+      "大模型正在同时走向云端和本地。很多人已经在用 Ollama、LM Studio，或浏览器里的轻量模型，但入口仍然分散：每个工具一套界面，换一个引擎就要重新学习。",
+      "ChatGUI 不绑定某一家厂商，也不强迫流量经过我们的服务器——只提供一个干净、好用的聊天界面，把选择权留给用户。",
+      "我们相信：接口会越来越统一，本地会越来越好跑；真正该省掉的，是「接上就能聊」之前那些多余的摩擦。",
+    ],
+  },
+  whatWeDo: {
+    heading: "我们做什么",
+    items: [
+      {
+        title: "三种接入方式",
+        body: "浏览器免安装试用、本机连接 Ollama / LM Studio、三方填写兼容 API，按场景自由切换。",
+      },
+      {
+        title: "数据留在本机",
+        body: "对话与设置保存在你的浏览器；请求直连所选引擎，不经过 ChatGUI 中转。",
+      },
+      {
+        title: "发现与导航",
+        body: "整理可接入来源与 AI 圈常用产品、工具与资讯，帮你更快找到下一步。",
+      },
+    ],
+  },
+  values: {
+    heading: "我们坚持什么",
+    items: [
+      {
+        title: "极简优先",
+        body: "少概念、少弹窗、少失败。默认尽量少配置，连不上时给出人话引导。",
+      },
+      {
+        title: "本机优先",
+        body: "把本机模型当作主路径；云端与聚合 API 作为补充，需要时随时接上。",
+      },
+      {
+        title: "用户可控",
+        body: "模型列表可自管，备份可写到你授权的本地文件夹，数据路径由你决定。",
+      },
+      {
+        title: "开放兼容",
+        body: "只要提供 OpenAI 兼容接口，就能接入——不锁死某一家运行时或云厂商。",
+      },
+    ],
+  },
+  closing: {
+    heading: "一起把聊天壳做薄",
+    paragraphs: [
+      "无论你是刚打开 Chrome 想试一把，还是已经在本机跑着模型的人，ChatGUI 都希望成为那层不碍事的界面。",
+      "从会话开始聊，或到模型 / 发现页配置来源——选择权始终在你这边。",
+    ],
+  },
+};
+
+export const aboutEn: AboutContent = {
+  title: "About ChatGUI",
+  lead:
+    "A thin chat shell for Chrome on-device AI, local models on your machine, and OpenAI-compatible APIs you configure yourself.",
+  vision: {
+    heading: "Our vision",
+    paragraphs: [
+      "Models are moving to both the cloud and the device. People already run Ollama, LM Studio, or lightweight browser models — but every stack has its own UI, and switching engines means starting over.",
+      "ChatGUI is not locked to one vendor and does not route your chats through our servers. It is a clean chat interface that leaves the choice to you.",
+      "Interfaces will keep converging and local models will keep getting easier. What should disappear is the friction before the first real conversation.",
+    ],
+  },
+  whatWeDo: {
+    heading: "What we do",
+    items: [
+      {
+        title: "Three ways in",
+        body: "Browser with zero install, local Ollama / LM Studio, or any compatible third-party API — switch by need.",
+      },
+      {
+        title: "Data stays local",
+        body: "Chats and settings live in your browser. Requests go straight to the engine you chose.",
+      },
+      {
+        title: "Discover & navigate",
+        body: "Curated connectable sources plus AI apps, tools, and news so the next step is easier to find.",
+      },
+    ],
+  },
+  values: {
+    heading: "What we stand for",
+    items: [
+      {
+        title: "Minimal by default",
+        body: "Fewer concepts, fewer modals, fewer dead ends. Light setup first; plain-language help when things fail.",
+      },
+      {
+        title: "Local first",
+        body: "Treat on-device and local models as the main path; cloud APIs as a backup when you need them.",
+      },
+      {
+        title: "Under your control",
+        body: "Manage your model list, and back up to a folder you authorize — your data, your path.",
+      },
+      {
+        title: "Open & compatible",
+        body: "Any OpenAI-compatible endpoint can plug in. No lock-in to one runtime or cloud vendor.",
+      },
+    ],
+  },
+  closing: {
+    heading: "Keep the shell thin",
+    paragraphs: [
+      "Whether you are trying Chrome AI for the first time or already running models locally, ChatGUI aims to stay out of the way.",
+      "Start chatting, or configure sources under Models / Discover — the choice stays yours.",
+    ],
+  },
+};
+
+/** @deprecated kept for any old imports */
 export type ArticleSection = {
   heading: string;
   paragraphs: string[];
 };
-
 export type Article = {
   title: string;
   updated: string;
   lead: string;
   sections: ArticleSection[];
-};
-
-export const aboutZh: Article = {
-  title: "关于 ChatGUI",
-  updated: "2026",
-  lead:
-    "ChatGUI 是一个极简聊天壳：让你方便地使用 Chrome 浏览器内置模型、本机本地大模型，以及自行配置的第三方 OpenAI 兼容接口。",
-  sections: [
-    {
-      heading: "我们在解决什么问题",
-      paragraphs: [
-        "大模型正在同时走向云端和本地。很多人已经在用 Ollama、LM Studio，或浏览器里的轻量模型，但入口仍然分散：每个工具一套界面，换一个引擎就要重新学习。",
-        "ChatGUI 想做最薄的那一层——不绑定某一家厂商，不强迫流量经过我们的服务器，只提供一个干净、好用的聊天界面，把选择权留给用户。",
-      ],
-    },
-    {
-      heading: "三种使用方式",
-      paragraphs: [
-        "浏览器本地：在支持的 Chrome 上，可直接试用内置小模型（如 Gemini Nano / Prompt API），免安装、适合先体验。",
-        "本机模型：连接 Ollama、LM Studio 等本地引擎，适合要更强能力、隐私和离线的日常使用。",
-        "第三方模型：填写 OpenRouter 等 OpenAI 兼容地址与 API Key，在轻薄本或需要云端模型时也能立刻聊起来。",
-      ],
-    },
-    {
-      heading: "诞生背景",
-      paragraphs: [
-        "本地模型会越来越多、越来越好跑，但「接上就能聊」仍然不够省事。跨域、端口、Key、模型名……这些细节不该挡住第一次对话。",
-        "所以我们做了 ChatGUI：默认尽量少配置，连不上时给出人话引导；进阶用户再打开设置，自由切换引擎。",
-      ],
-    },
-    {
-      heading: "对未来的判断",
-      paragraphs: [
-        "未来本地模型会更普及：更小的体积、更好的端侧芯片、更统一的接口。ChatGUI 会继续把「本机优先」当作主路径。",
-        "与此同时，云端和聚合 API 不会消失。只要它们提供 OpenAI 兼容接口，ChatGUI 就能接上——本地跑不动时，你仍然有退路。",
-      ],
-    },
-    {
-      heading: "我们坚持什么",
-      paragraphs: [
-        "对话与设置保存在你的浏览器本地；请求直连你选择的引擎，不经过 ChatGUI 中转。",
-        "界面保持极简：少概念、少弹窗、少失败。文档讲「怎么用」，关于页讲「为什么存在」。",
-      ],
-    },
-  ],
-};
-
-export const aboutEn: Article = {
-  title: "About ChatGUI",
-  updated: "2026",
-  lead:
-    "ChatGUI is a minimal chat shell that makes it easy to use Chrome’s on-device AI, local models on your machine, and third-party OpenAI-compatible APIs you configure yourself.",
-  sections: [
-    {
-      heading: "The problem",
-      paragraphs: [
-        "Models are moving to both the cloud and the device. People already run Ollama, LM Studio, or lightweight browser models — but every stack has its own UI, and switching engines means starting over.",
-        "ChatGUI aims to be the thinnest layer: not locked to one vendor, not routing your chats through our servers — just a clean chat interface that leaves the choice to you.",
-      ],
-    },
-    {
-      heading: "Three ways to chat",
-      paragraphs: [
-        "Browser: on supported Chrome builds, try the built-in small model (Prompt API / Gemini Nano) with zero install.",
-        "Local: connect Ollama or LM Studio for stronger, private, offline-friendly use.",
-        "Third-party: paste an OpenAI-compatible Base URL and API key (e.g. OpenRouter) when you need cloud models.",
-      ],
-    },
-    {
-      heading: "Why we built it",
-      paragraphs: [
-        "Local models will keep getting better — but “just start chatting” is still too hard. CORS, ports, keys, model names shouldn’t block the first message.",
-        "So ChatGUI defaults to low friction, explains failures in plain language, and keeps power features in Settings for people who want them.",
-      ],
-    },
-    {
-      heading: "Looking ahead",
-      paragraphs: [
-        "We expect local models to become more common: smaller weights, better NPUs, more standard APIs. ChatGUI will stay local-first.",
-        "Cloud and aggregator APIs will remain. As long as they speak OpenAI-compatible chat completions, ChatGUI can connect — a fallback when your laptop can’t run a big model.",
-      ],
-    },
-    {
-      heading: "What we won’t compromise",
-      paragraphs: [
-        "Chats and settings stay in your browser. Requests go straight to the engine you pick — ChatGUI doesn’t proxy them.",
-        "The UI stays minimal. Docs explain how to use it; this About page explains why it exists.",
-      ],
-    },
-  ],
 };

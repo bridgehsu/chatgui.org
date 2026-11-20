@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BackupPanel } from "../components/BackupPanel";
 import { useI18n } from "../lib/i18n";
 import {
   activateModelEntry,
@@ -23,6 +24,7 @@ export function SettingsPage() {
     loadActiveModelId(loadModelEntries()),
   );
   const [editorOpen, setEditorOpen] = useState(false);
+  const [backupOpen, setBackupOpen] = useState(false);
   const [editorMode, setEditorMode] = useState<EditorMode>("create");
   const [draft, setDraft] = useState<ModelEntry>(emptyModelDraft);
   const [msg, setMsg] = useState("");
@@ -162,6 +164,13 @@ export function SettingsPage() {
               <h1>{t("navModels")}</h1>
             </div>
             <div className="page-toolbar-actions">
+              <button
+                type="button"
+                className="ghost-btn page-tool-btn"
+                onClick={() => setBackupOpen(true)}
+              >
+                {t("backupTitle")}
+              </button>
               <button
                 type="button"
                 className="save-btn models-add-btn"
@@ -453,6 +462,8 @@ export function SettingsPage() {
           </aside>
         </div>
       ) : null}
+
+      <BackupPanel open={backupOpen} onClose={() => setBackupOpen(false)} />
     </div>
   );
 }
