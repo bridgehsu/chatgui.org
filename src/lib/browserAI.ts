@@ -161,7 +161,7 @@ export async function streamBrowserChat(options: {
   }
 }
 
-export function browserStatusLabel(status: BrowserAIStatus, locale: "zh" | "en" = "zh") {
+export function browserStatusLabel(status: BrowserAIStatus, locale: "zh" | "en" = "en") {
   if (locale === "en") {
     switch (status) {
       case "readily":

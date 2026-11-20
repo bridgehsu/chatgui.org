@@ -341,12 +341,12 @@ function readLocale(): LocaleCode {
   } catch {
     // ignore
   }
-  return "zh";
+  return "en";
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<LocaleCode>(() =>
-    typeof window === "undefined" ? "zh" : readLocale(),
+    typeof window === "undefined" ? "en" : readLocale(),
   );
 
   const setLocale = useCallback((next: LocaleCode) => {

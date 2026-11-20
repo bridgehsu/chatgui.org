@@ -205,22 +205,33 @@ export function SettingsPage() {
                 ) : (
                   entries.map((entry, index) => (
                       <tr key={entry.id}>
-                        <td className="settings-col-index">{index + 1}</td>
-                        <td>
+                        <td
+                          className="settings-col-index"
+                          data-label={t("colIndex")}
+                        >
+                          {index + 1}
+                        </td>
+                        <td data-label={t("colName")}>
                           <div className="settings-source">
                             <strong>{entry.name}</strong>
                           </div>
                         </td>
-                        <td>
+                        <td data-label={t("colType")}>
                           {typeLabel(entry.engine, locale === "en" ? "en" : "zh")}
                         </td>
-                        <td className="settings-cell-mono">
+                        <td
+                          className="settings-cell-mono"
+                          data-label={t("colEndpoint")}
+                        >
                           {endpointLabel(entry)}
                         </td>
-                        <td className="settings-cell-mono">
+                        <td
+                          className="settings-cell-mono"
+                          data-label={t("colModel")}
+                        >
                           {entry.model || "—"}
                         </td>
-                        <td>
+                        <td data-label={t("colAction")}>
                           <div className="settings-row-actions">
                             <button
                               type="button"

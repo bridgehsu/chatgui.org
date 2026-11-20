@@ -8,7 +8,7 @@ export function defaultModelEntries(): ModelEntry[] {
   return [
     {
       id: "chrome",
-      name: "Chrome 浏览器",
+      name: "Chrome browser",
       engine: "browser",
       preset: "ollama",
       baseUrl: "",
@@ -84,7 +84,7 @@ function normalizeEntry(entry: Partial<ModelEntry>): ModelEntry {
   const preset = (entry.preset || "custom") as PresetKey;
   return {
     id: entry.id || uid(),
-    name: (entry.name || "未命名").trim() || "未命名",
+    name: (entry.name || "Untitled").trim() || "Untitled",
     engine,
     preset,
     baseUrl: entry.baseUrl || "",

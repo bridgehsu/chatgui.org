@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useI18n, type LocaleCode } from "../lib/i18n";
 
 const LOCALE_OPTIONS: Array<{ key: LocaleCode; short: string; label: string }> = [
-  { key: "zh", short: "中", label: "中文" },
   { key: "en", short: "EN", label: "English" },
+  { key: "zh", short: "中", label: "中文" },
 ];
 
 export function LocaleSwitch() {

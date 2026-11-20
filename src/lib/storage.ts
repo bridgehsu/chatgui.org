@@ -179,7 +179,7 @@ export function uid() {
 
 export function titleFromMessages(messages: Conversation["messages"]) {
   const first = messages.find((m) => m.role === "user" && m.content.trim());
-  if (!first) return "新对话";
+  if (!first) return "New chat";
   const t = first.content.trim().replace(/\s+/g, " ");
   return t.length > 28 ? `${t.slice(0, 28)}…` : t;
 }
