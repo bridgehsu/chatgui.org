@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useI18n } from "../lib/i18n";
 import { aboutEn, aboutZh } from "../content/about";
 
@@ -84,7 +85,29 @@ export function AboutPage() {
               {page.closing.paragraphs.map((p) => (
                 <p key={p}>{p}</p>
               ))}
+              <div className="about-closing-actions">
+                <Link to="/" className="save-btn about-cta-primary">
+                  {page.closing.ctaPrimary}
+                </Link>
+                <Link to="/models" className="ghost-btn about-cta">
+                  {page.closing.ctaSecondary}
+                </Link>
+                <Link to="/discover" className="ghost-btn about-cta">
+                  {page.closing.ctaTertiary}
+                </Link>
+              </div>
             </section>
+
+            <footer className="about-foot">
+              <p>{page.closing.foot}</p>
+              <p>
+                <Link to="/docs">{locale === "en" ? "Docs" : "文档"}</Link>
+                <span aria-hidden> · </span>
+                <Link to="/models">
+                  {locale === "en" ? "Backup" : "数据备份"}
+                </Link>
+              </p>
+            </footer>
           </div>
         </div>
       </div>

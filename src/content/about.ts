@@ -21,6 +21,10 @@ export type AboutContent = {
   closing: {
     heading: string;
     paragraphs: string[];
+    ctaPrimary: string;
+    ctaSecondary: string;
+    ctaTertiary: string;
+    foot: string;
   };
 };
 
@@ -80,6 +84,10 @@ export const aboutZh: AboutContent = {
       "无论你是刚打开 Chrome 想试一把，还是已经在本机跑着模型的人，ChatGUI 都希望成为那层不碍事的界面。",
       "从会话开始聊，或到模型 / 发现页配置来源——选择权始终在你这边。",
     ],
+    ctaPrimary: "开始聊天",
+    ctaSecondary: "管理模型",
+    ctaTertiary: "浏览发现",
+    foot: "© 2026 ChatGUI · 对话与设置保存在本机浏览器",
   },
 };
 
@@ -139,6 +147,10 @@ export const aboutEn: AboutContent = {
       "Whether you are trying Chrome AI for the first time or already running models locally, ChatGUI aims to stay out of the way.",
       "Start chatting, or configure sources under Models / Discover — the choice stays yours.",
     ],
+    ctaPrimary: "Start chatting",
+    ctaSecondary: "Manage models",
+    ctaTertiary: "Browse Discover",
+    foot: "© 2026 ChatGUI · Chats and settings stay in your browser",
   },
 };
 
